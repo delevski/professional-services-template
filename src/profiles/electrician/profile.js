@@ -14,7 +14,7 @@ export const electricianProfile = {
     navigation: { mainLabel: 'ניווט ראשי', footerLabel: 'ניווט תחתון', openLabel: 'פתיחת תפריט', closeLabel: 'סגירת תפריט' },
     quote: { headerLabel: 'פתיחת טופס הצעה', finalLabel: 'פתיחת טופס יצירת קשר' },
     floating: { phoneLabel: 'התקשרו עכשיו', whatsappLabel: 'שלחו WhatsApp', topLabel: 'חזרה לראש העמוד' },
-    modal: { eyebrow: 'פרטים ראשוניים', description: 'השאירו פרטים ונחזור אליכם לתיאום. זהו טופס הדגמה.', closeLabel: 'סגירה' },
+    modal: { eyebrow: 'פרטים ראשוניים', description: 'השאירו פרטים ונחזור אליכם לתיאום. זהו טופס הדגמה.', closeLabel: 'סגירה', requiredError: 'זהו שדה חובה.', failureMessage: 'לא הצלחנו לשמור את הפרטים. המידע שהזנתם נשמר בטופס ואפשר לנסות שוב.', successMessage: 'הפרטים נשמרו בהצלחה. אפשר להמשיך ל־WhatsApp.', manualWhatsappLabel: 'המשך ידני ל־WhatsApp' },
   },
   sections: {
     trust: { eyebrow: 'הסטנדרט המקצועי', heading: 'למה לבחור בנו' },
@@ -127,6 +127,7 @@ export const electricianProfile = {
   leadForm: {
     heading: 'קבלת הצעת מחיר',
     submitLabel: 'שליחת הפרטים',
+    submittingLabel: 'שולחים…',
     fields: {
       fullName: { label: 'שם מלא', required: true },
       phone: { label: 'טלפון', required: true },
@@ -138,6 +139,7 @@ export const electricianProfile = {
     workTypes: ['תקלה', 'לוח חשמל', 'תאורה ונקודות', 'עמדת טעינה', 'בית חכם', 'תחזוקת עסק', 'אחר'],
     urgencyOptions: ['רגיל', 'בימים הקרובים', 'דחוף — לבדיקת זמינות'],
     demoStorageKey: 'professional-services-demo-leads',
+    whatsappMessage: { intro: 'פנייה חדשה לקבלת הצעת מחיר', labels: { name: 'שם', phone: 'טלפון', workType: 'סוג העבודה', city: 'עיר', urgency: 'דחיפות', description: 'תיאור' } },
   },
   seo: {
     title: 'אורי לוי — חשמלאי מוסמך במרכז | אתר הדגמה',

@@ -2,10 +2,10 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: var(--surface, #f4f0e8); }
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
 a { color: inherit; text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
-button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
 .site { overflow: clip; background: var(--surface); }
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.is-visible { opacity: 1; transform: none; }
@@ -129,9 +129,11 @@ blockquote footer small { display: block; color: #aeb8bd; }
 .modal h2 { margin-bottom: 15px; }
 .modal__close { position: absolute; inset: 18px auto auto 18px; border: 0; background: none; cursor: pointer; }
 .modal form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
-.modal label { display: grid; gap: 5px; font-weight: 600; }
-.modal input, .modal textarea { width: 100%; padding: 10px; border: 1px solid #17252f44; background: #fff; }
+.form-field { display: grid; gap: 5px; }
+.modal label { font-weight: 600; }
+.modal input, .modal textarea, .modal select { width: 100%; padding: 10px; border: 1px solid #17252f44; background: #fff; }
 .modal textarea { min-height: 90px; }
+.field-error { color: #9b2915; font-size: .82rem; }
 
 @media (max-width: 900px) {
   .header__cta { display: none; }
