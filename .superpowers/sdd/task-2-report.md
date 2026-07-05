@@ -64,4 +64,51 @@ React Doctor initially reported four issues (81/100). The confirmed button-type,
 
 - Profile image files intentionally do not exist yet; styled placeholders display until the asset task supplies them.
 - React Doctor's single barrel warning is an intentional false positive against the required `ACTIVE_PROFILE` selector interface.
-- The quote dialog is only the Task 2 integration shell. Delivery adapters, complete validation, focus restoration, and success/failure behavior belong to the dedicated lead-flow task.
+- The quote dialog is only the Task 2 integration shell. Delivery adapters, complete validation, and success/failure behavior belong to the dedicated lead-flow task.
+
+## Review Fixes — 2026-07-05
+
+Fix commit: `08871324f71b1dae21be4fe3089fa9675dbcd7ad`
+
+Resolved every Task 2 review finding:
+
+- Removed the Google Fonts `@import`; typography now uses a system/local Hebrew-capable stack with no font network request.
+- Moved all visible framing copy and accessible labels from core/App into `ACTIVE_PROFILE.ui` and `ACTIVE_PROFILE.sections`.
+- Made the brand, trust, and service icon selections profile-owned keys rendered through the domain-neutral `ProfileIcon` registry.
+- Moved the `OL` portrait placeholder initials into the brand profile.
+- Wired `useReveal` to the content sections and added functional `.reveal`/`.is-visible` transitions with a reduced-motion override.
+- Replaced declarative `<dialog open>` with event-driven `showModal()`/`close()`, initial close-control focus, native cancel handling, top-layer background inertness, and trigger focus restoration.
+- Added regression tests before implementation and observed three intended RED failures for missing profile configuration, reveal wiring, and dialog focus handling.
+
+Exact verification commands and results:
+
+```text
+npm test -- src/App.test.jsx --run
+RED: Test Files 1 failed (1); Tests 3 failed | 3 passed (6)
+
+npm test -- src/App.test.jsx src/core/utils/assets.test.js --run
+GREEN: Test Files 2 passed (2); Tests 8 passed (8)
+
+npm test -- --run
+Test Files 3 passed (3); Tests 12 passed (12)
+
+npm run build
+1793 modules transformed; built successfully in 444ms
+
+npx -y react-doctor@latest . --verbose --scope changed
+93/100; one intentional ACTIVE_PROFILE selector-barrel warning
+
+git diff --check
+clean
+
+rg -n '[א-ת]' src/core src/App.jsx
+no matches
+
+rg -n 'fonts\\.googleapis|@import\\s+url' src/styles.css
+no matches
+
+git -C '/Users/corphd/Desktop/Or codes projects/pilaties-template' status --short
+clean
+```
+
+The remaining React Doctor barrel warning is intentionally retained because `src/profiles/index.js` is the required active-profile selection boundary; directly importing the electrician profile into App would reintroduce domain coupling.
