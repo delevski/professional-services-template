@@ -1,0 +1,2 @@
+import { ArrowUp, MessageCircle, Phone } from 'lucide-react';
+export default function FloatingActions({ contact, progress }) { return <><div className="progress" style={{ transform: `scaleX(${progress})` }} /><div className="floating"><a href={`tel:${contact.phone}`} aria-label="התקשרו עכשיו"><Phone /></a><a href={`https://wa.me/${contact.whatsapp}`} aria-label="שלחו WhatsApp"><MessageCircle /></a><a href="#top" aria-label="חזרה לראש העמוד"><ArrowUp /></a></div></>; }

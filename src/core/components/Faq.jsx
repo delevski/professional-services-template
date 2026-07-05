@@ -1,0 +1,3 @@
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+export default function Faq({ items }) { const [open, setOpen] = useState(null); return <section className="section" id="faq" aria-labelledby="faq-title"><div className="shell faq-grid"><div><p className="eyebrow">מידע שימושי</p><h2 id="faq-title">שאלות ותשובות</h2><p>כל מה שכדאי לדעת לפני שמתאמים עבודה.</p></div><div>{items.map((item, i) => <div className="faq-item" key={item.question}><h3><button aria-expanded={open === i} aria-controls={`faq-${i}`} onClick={() => setOpen(open === i ? null : i)}>{item.question}<Plus aria-hidden="true" /></button></h3><div id={`faq-${i}`} hidden={open !== i}><p>{item.answer}</p></div></div>)}</div></div></section>; }

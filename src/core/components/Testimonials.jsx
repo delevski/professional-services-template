@@ -1,0 +1,2 @@
+import { Quote } from 'lucide-react';
+export default function Testimonials({ testimonials }) { return <section className="section section--light" aria-labelledby="testimonials-title"><div className="shell"><p className="eyebrow">לקוחות מספרים</p><h2 id="testimonials-title">המלצות לדוגמה</h2><div className="testimonial-row">{testimonials.map(item => <blockquote key={item.name}><Quote aria-hidden="true" /><p>“{item.quote}”</p><footer>{item.name}<small>תוכן לדוגמה</small></footer></blockquote>)}</div></div></section>; }

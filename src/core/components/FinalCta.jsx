@@ -1,0 +1,3 @@
+import { ArrowLeft, MessageCircle } from 'lucide-react';
+import Button from './Button';
+export default function FinalCta({ profile, onQuote }) { return <section className="final-cta" id="contact" aria-labelledby="contact-title"><div className="shell"><p className="eyebrow">מתחילים בשיחה קצרה</p><h2 id="contact-title">{profile.contact.heading}</h2><p>{profile.hero.description}</p><div className="actions"><Button aria-label="פתיחת טופס יצירת קשר" onClick={onQuote}>{profile.hero.primaryAction}<ArrowLeft aria-hidden="true" /></Button><a className="button button--ghost" href={`https://wa.me/${profile.contact.whatsapp}`}><MessageCircle aria-hidden="true" />{profile.hero.whatsappAction}</a></div></div></section>; }

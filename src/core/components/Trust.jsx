@@ -1,0 +1,3 @@
+import { ShieldCheck, ScanSearch, BadgeDollarSign, Clock3 } from 'lucide-react';
+const icons = [ShieldCheck, ScanSearch, BadgeDollarSign, Clock3];
+export default function Trust({ items }) { return <section className="section section--light" aria-labelledby="trust-title"><div className="shell"><p className="eyebrow">הסטנדרט המקצועי</p><h2 id="trust-title">למה לבחור בנו</h2><div className="card-grid card-grid--four">{items.map((item, i) => { const Icon = icons[i % icons.length]; return <article className="feature-card" key={item.title}><Icon aria-hidden="true" /><span>0{i + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>; })}</div></div></section>; }

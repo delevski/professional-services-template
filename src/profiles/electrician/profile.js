@@ -1,4 +1,4 @@
-const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
+import { assetUrl } from '../../core/utils/assets';
 
 export const electricianProfile = {
   id: 'electrician',

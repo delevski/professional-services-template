@@ -1,0 +1,6 @@
+import { ArrowLeft, Check, MessageCircle, Phone } from 'lucide-react';
+import Button from './Button';
+
+export default function Hero({ profile, onQuote }) {
+  return <section className="hero" id="top" aria-labelledby="hero-title"><div className="shell hero__grid"><div className="hero__copy"><p className="eyebrow">{profile.hero.eyebrow}</p><h1 id="hero-title">{profile.hero.headline}</h1><p className="hero__lead">{profile.hero.description}</p><div className="actions"><Button onClick={onQuote}>{profile.hero.primaryAction}<ArrowLeft aria-hidden="true" /></Button><a className="button button--ghost" href={`tel:${profile.contact.phone}`}><Phone aria-hidden="true" />{profile.hero.phoneAction}</a><a className="icon-link" href={`https://wa.me/${profile.contact.whatsapp}`}><MessageCircle aria-hidden="true" />{profile.hero.whatsappAction}</a></div><ul className="hero__proof">{profile.trust.map(item => <li key={item.title}><Check aria-hidden="true" />{item.title}</li>)}</ul></div><div className="hero__media"><img src={profile.hero.image} alt={profile.hero.imageAlt} onError={event => { event.currentTarget.hidden = true; }} /><div className="media-placeholder" aria-hidden="true"><span>01</span></div></div></div></section>;
+}
