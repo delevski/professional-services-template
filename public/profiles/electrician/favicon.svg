@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="אורי לוי — חשמל פרימיום">
+  <rect width="64" height="64" rx="15" fill="#101820"/>
+  <path d="M12 23h17v-8M52 41H35v8" fill="none" stroke="#B56A3B" stroke-width="4" stroke-linecap="round"/>
+  <path d="M35 7 18 34h12l-2 23 18-29H34z" fill="#F3B23C" stroke="#F4F0E8" stroke-width="2" stroke-linejoin="round"/>
+</svg>
