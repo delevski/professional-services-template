@@ -1,11 +1,12 @@
 import { expect, it } from 'vitest';
-import { renderProfileHtml } from './profileHtml';
+import { applyBaseToProfile, renderProfileHtml } from './profileHtml';
 
 const template = '<html lang=""><head><!-- PROFILE_METADATA --></head></html>';
 const fixture = {
   brand: { businessName: 'עסק אחר' }, theme: { language: 'en', direction: 'ltr', colors: { midnight: '#123456' } },
   contact: { phone: '+1', email: 'a@example.com', location: 'Elsewhere' }, serviceArea: { areas: ['North'] },
-  seo: { title: 'Different title', description: 'Different description', canonicalUrl: 'https://example.com/site/', socialImage: '/base/social.jpg', favicon: '/base/icon.svg', touchIcon: '/base/touch.png', locale: 'en_US', schemaType: 'ProfessionalService' },
+  hero: { image: '/profiles/other/hero.webp' },
+  seo: { title: 'Different title', description: 'Different description', canonicalUrl: 'https://example.com/site/', socialImage: '/base/social.jpg', favicon: '/base/icon.svg', touchIcon: '/base/touch.png', locale: 'en_US', schema: { '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'Example Co — fictional demo', description: 'Schema description', url: 'https://example.com/site/', image: '/base/social.jpg', telephone: '+1', email: 'a@example.com', areaServed: ['Ontario'], address: { '@type': 'PostalAddress', addressRegion: 'Ontario', addressCountry: 'CA' } } },
 };
 
 it('generates all discoverability metadata from the selected profile', () => {
@@ -18,5 +19,17 @@ it('generates all discoverability metadata from the selected profile', () => {
   expect(html).toContain('content="https://example.com/base/social.jpg"');
   expect(html).toContain('content="עסק אחר"');
   expect(html).toContain('"@type":"ProfessionalService"');
+  expect(html).toContain('"name":"Example Co — fictional demo"');
+  expect(html).toContain('"addressCountry":"CA"');
+  expect(html).not.toContain('עסק לדוגמה');
+  expect(html).not.toContain('"addressCountry":"IL"');
   expect(html).not.toContain('aggregateRating');
+});
+
+it('rewrites every profile-local asset from Vite resolved base', () => {
+  const based = applyBaseToProfile(fixture, '/another-repo/');
+  expect(based.seo.favicon).toBe('/another-repo/base/icon.svg');
+  expect(based.seo.socialImage).toBe('/another-repo/base/social.jpg');
+  expect(based.seo.schema.image).toBe('/another-repo/base/social.jpg');
+  expect(based.hero.image).toBe('/another-repo/profiles/other/hero.webp');
 });

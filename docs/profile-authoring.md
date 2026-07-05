@@ -18,7 +18,7 @@ In the new `profile.js`, replace all of the following rather than leaving electr
 - hero, trust points, services, projects, testimonials, packages, professional biography, statistics, credentials, service areas, hours, FAQ, and footer copy
 - every name, claim, price, certification, warranty, location, phone number, WhatsApp number, email address, and prepared message
 - form headings, field labels, work types, urgency choices, validation copy, local-storage key, and WhatsApp summary labels
-- SEO title, description, locale, canonical URL, favicon, touch icon, social image, and supported schema type. The Vite HTML transform generates title, canonical, Open Graph, Twitter, icons, and JSON-LD from this one profile source; do not hand-edit `index.html` metadata.
+- SEO title, description, locale, canonical URL, favicon, touch icon, social image, and the complete `seo.schema` object. Schema name/disclosure, type, description, image, contact data, service area, and postal country/region are profile-owned; do not rely on renderer defaults. The Vite HTML transform generates title, canonical, Open Graph, Twitter, icons, and JSON-LD from this one profile source; do not hand-edit `index.html` metadata.
 - privacy label, anchor, heading, and policy text. Replace the demo local-storage explanation with the business's reviewed production privacy policy and lead-provider disclosures before launch.
 - domain icon keys used by the profile
 
@@ -34,7 +34,7 @@ Change `src/profiles/index.js` to export the new profile as `ACTIVE_PROFILE`. Ru
 
 ## 5. Set repository and production URLs
 
-Create a new repository for the business. Set `base` in `vite.config.js` to `/<repository-name>/` (or `/` for a custom root domain). Update the canonical, Open Graph, Twitter, JSON-LD, sitemap, robots sitemap URL, README preview, and all production asset URLs to the final HTTPS address.
+Create a new repository for the business. Set `base` in `vite.config.js` to `/<repository-name>/` (or `/` for a custom root domain). The `active-profile-html` plugin reads Vite's resolved base and rewrites all profile-local `/profiles/`, `/shared/`, and `/base/` asset paths for build metadata; browser assets use the same `import.meta.env.BASE_URL`. Do not bake a repository name into profile asset paths. Update canonical/schema URLs, sitemap, robots sitemap URL, and README preview to the final HTTPS address.
 
 ## 6. Configure leads safely
 

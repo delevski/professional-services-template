@@ -153,6 +153,17 @@ export const electricianProfile = {
     favicon: assetUrl('profiles/electrician/favicon.svg'),
     touchIcon: assetUrl('profiles/electrician/apple-touch-icon.png'),
     locale: 'he_IL',
-    schemaType: 'Electrician',
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'Electrician',
+      name: 'אורי לוי — חשמל פרימיום (עסק לדוגמה)',
+      description: 'שירותי חשמל מקצועיים לדוגמה במרכז: תקלות, לוחות, תאורה, עמדות טעינה ובתים חכמים.',
+      url: 'https://delevski.github.io/professional-services-template/',
+      image: assetUrl('profiles/electrician/social-preview.jpg'),
+      telephone: '+972-50-555-0147',
+      email: 'hello@ori-electric-demo.example',
+      areaServed: ['תל אביב', 'רמת גן', 'גבעתיים', 'פתח תקווה', 'קריית אונו', 'בקעת אונו'],
+      address: { '@type': 'PostalAddress', addressRegion: 'מרכז ישראל — כתובת לדוגמה', addressCountry: 'IL' },
+    },
   },
 };
