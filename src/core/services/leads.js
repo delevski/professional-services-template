@@ -14,8 +14,16 @@ export async function submitLead(input, endpoint = import.meta.env.VITE_LEAD_END
       body: JSON.stringify(lead),
     });
     if (!response.ok) throw new Error(`Lead submission failed (${response.status})`);
-    const result = await response.json();
-    return { id: result.id, storedAt: result.storedAt };
+    const fallback = { id: `client-${Date.now()}`, storedAt: new Date().toISOString() };
+    if (response.status === 204) return fallback;
+    const text = typeof response.text === 'function' ? await response.text() : '';
+    if (!text && typeof response.json === 'function') {
+      const result = await response.json();
+      return { id: result.id ?? fallback.id, storedAt: result.storedAt ?? fallback.storedAt };
+    }
+    if (!text) return fallback;
+    const result = JSON.parse(text);
+    return { id: result.id ?? fallback.id, storedAt: result.storedAt ?? fallback.storedAt };
   }
 
   const id = String(Date.now());

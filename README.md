@@ -12,6 +12,8 @@ Shared presentation and behavior live in `src/core/`. Each profession owns its c
 
 Every real business or profession should be deployed from a **separate repository and Pages site**. Do not mix client profiles or production lead data in this demo repository. See [Profile authoring](docs/profile-authoring.md) for the complete duplication and deployment checklist.
 
+Discoverability metadata is generated at build time from the active profile's `seo`, brand, contact, and service-area data. The footer privacy copy is also profile-owned; replace the demo browser-storage notice with a reviewed production policy before collecting real leads.
+
 ## Local development
 
 ```sh

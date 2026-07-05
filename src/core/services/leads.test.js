@@ -43,3 +43,11 @@ it('rejects endpoint failures without writing demo storage', async () => {
   await expect(submitLead({ name: 'Dana', phone: '123', workType: 'Repair', city: 'Haifa', urgency: 'Soon', storageKey: 'test-demo-leads' }, '/api/leads')).rejects.toThrow();
   expect(localStorage.getItem('test-demo-leads')).toBeNull();
 });
+
+it.each([
+  ['204 response', { ok: true, status: 204, text: async () => '' }],
+  ['empty 200 response', { ok: true, status: 200, text: async () => '' }],
+])('accepts a successful %s and synthesizes client metadata', async (_label, response) => {
+  vi.spyOn(globalThis, 'fetch').mockResolvedValue(response);
+  await expect(submitLead({ name: 'Dana' }, '/api/leads')).resolves.toEqual({ id: expect.stringMatching(/^client-/), storedAt: expect.any(String) });
+});

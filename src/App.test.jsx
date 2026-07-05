@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { expect, it } from 'vitest';
 import App from './App';
@@ -82,4 +82,32 @@ it('renders the profile testimonial portrait URL as a lazy decorative image', ()
   expect(portrait).toHaveAttribute('width', '72');
   expect(portrait).toHaveAttribute('height', '72');
   expect(portrait).toHaveAttribute('alt', '');
+});
+
+it('supports an accessible mobile navigation interaction', async () => {
+  const user = userEvent.setup(); render(<App />);
+  const toggle = screen.getByRole('button', { name: ACTIVE_PROFILE.ui.navigation.openLabel });
+  expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await user.click(toggle);
+  expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  const nav = screen.getByRole('navigation', { name: ACTIVE_PROFILE.ui.navigation.mainLabel });
+  expect(nav).toHaveAttribute('id', expect.any(String));
+  expect(toggle).toHaveAttribute('aria-controls', nav.id);
+  const link = within(nav).getByRole('link', { name: 'שירותים' });
+  expect(link).toBeVisible(); await user.click(link);
+  expect(toggle).toHaveAttribute('aria-expanded', 'false');
+});
+
+it('renders prominent demo disclosure, privacy access, project coverage, and profile input metadata', async () => {
+  const user = userEvent.setup(); render(<App />);
+  expect(screen.getByText('אתר הדגמה / עסק בדיוני')).toBeVisible();
+  expect(screen.getByRole('link', { name: ACTIVE_PROFILE.privacy.label })).toHaveAttribute('href', ACTIVE_PROFILE.privacy.href);
+  expect(new Set(ACTIVE_PROFILE.projects.map(project => project.category))).toEqual(new Set(['residential', 'retail', 'office', 'lighting', 'ev', 'smart-home']));
+  expect(ACTIVE_PROFILE.projects.every(project => project.sample && project.service && project.challenge && project.result)).toBe(true);
+  expect(screen.getAllByText(new RegExp(ACTIVE_PROFILE.sections.projects.sampleLabel))).toHaveLength(6);
+  await user.click(screen.getAllByRole('button', { name: /קבלו הצעת מחיר/ })[0]);
+  expect(screen.getByLabelText('שם מלא')).toHaveAttribute('autocomplete', 'name');
+  expect(screen.getByLabelText('טלפון')).toHaveAttribute('type', 'tel');
+  expect(screen.getByLabelText('טלפון')).toHaveAttribute('inputmode', 'tel');
+  expect(screen.getByLabelText('טלפון')).toHaveAttribute('autocomplete', 'tel');
 });

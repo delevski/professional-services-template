@@ -8,6 +8,7 @@ export const electricianProfile = {
     name: 'אורי לוי',
     businessName: 'אורי לוי — חשמל פרימיום',
     descriptor: 'חשמלאי מוסמך לבתים ולעסקים',
+    demoBadge: 'אתר הדגמה / עסק בדיוני',
     sampleDisclosure: 'אתר הדגמה — כל התוכן העסקי בדיוני ולדוגמה בלבד, לרבות שמות, הסמכות, מחירים, פרטי קשר, פרויקטים ותוצאות, המלצות, שנות ניסיון, מספר פרויקטים וכל נתונים כמותיים.',
   },
   ui: {
@@ -19,7 +20,7 @@ export const electricianProfile = {
   sections: {
     trust: { eyebrow: 'הסטנדרט המקצועי', heading: 'למה לבחור בנו' },
     services: { eyebrow: 'מומחיות מקצה לקצה', heading: 'שירותים' },
-    projects: { eyebrow: 'עבודה שמדברת בעד עצמה', heading: 'פרויקטים נבחרים', challengeLabel: 'האתגר', resultLabel: 'התוצאה' },
+    projects: { eyebrow: 'עבודה שמדברת בעד עצמה', heading: 'פרויקטים נבחרים', challengeLabel: 'האתגר', resultLabel: 'התוצאה', sampleLabel: 'פרויקט לדוגמה' },
     testimonials: { eyebrow: 'לקוחות מספרים', heading: 'המלצות לדוגמה', sampleLabel: 'תוכן לדוגמה', previousLabel: 'להמלצה הקודמת', nextLabel: 'להמלצה הבאה', positionTemplate: '{current} מתוך {total}' },
     packages: { eyebrow: 'שקיפות מתחילה כאן', heading: 'מחירים התחלתיים', actionLabel: 'לקבלת הצעה', note: 'המחירים באתר הם לדוגמה בלבד. מחיר סופי ייקבע לאחר אבחון.' },
     professional: { eyebrow: 'המקצוען מאחורי העבודה', sampleSuffix: 'לדוגמה' },
@@ -46,6 +47,7 @@ export const electricianProfile = {
     { label: 'שאלות ותשובות', href: '#faq' },
     { label: 'יצירת קשר', href: '#contact' },
   ],
+  privacy: { label: 'מדיניות פרטיות', href: '#privacy', heading: 'פרטיות באתר ההדגמה', description: 'הטופס נשמר מקומית בדפדפן במצב הדגמה. לפני פרסום יש להחליף סעיף זה במדיניות הפרטיות של העסק ובפרטי ספק מסירת הלידים.' },
   hero: {
     eyebrow: 'חשמל מקצועי, בטוח ושקוף',
     headline: 'חשמל בטוח. עבודה מדויקת. שקט אמיתי.',
@@ -71,10 +73,12 @@ export const electricianProfile = {
     { id: 'business', icon: 'briefcase', title: 'תחזוקת עסקים', description: 'טיפול מונע ותיקונים למשרדים ולחנויות.', cta: 'לבניית מסלול שירות' },
   ],
   projects: [
-    { title: 'שדרוג לוח בדירה', type: 'מגורים', challenge: 'לוח ישן ללא סימון', result: 'חלוקה ברורה ותשתית מוכנה להרחבה', service: 'panels', image: assetUrl('profiles/electrician/panel-work.webp') },
-    { title: 'תאורה אדריכלית', type: 'בית פרטי', challenge: 'מספר אזורי תאורה', result: 'תרחישים נוחים וגימור נקי', service: 'lighting', image: assetUrl('profiles/electrician/lighting.webp') },
-    { title: 'הכנה לעמדת טעינה', type: 'חניה משותפת', challenge: 'מרחק מהלוח הראשי', result: 'תוואי מסודר ומוגן', service: 'ev', image: assetUrl('profiles/electrician/ev-charging.webp') },
-    { title: 'בקרת בית חכם', type: 'דירה חדשה', challenge: 'ריבוי מערכות', result: 'שליטה מאוחדת ונוחה', service: 'smart-home', image: assetUrl('profiles/electrician/smart-home.webp') },
+    { title: 'שדרוג לוח בדירה', type: 'מגורים', category: 'residential', challenge: 'לוח ישן ללא סימון', result: 'חלוקה ברורה ותשתית מוכנה להרחבה', service: 'panels', sample: true, image: assetUrl('profiles/electrician/panel-work.webp') },
+    { title: 'תאורה אדריכלית', type: 'תאורה', category: 'lighting', challenge: 'מספר אזורי תאורה', result: 'תרחישים נוחים וגימור נקי', service: 'lighting', sample: true, image: assetUrl('profiles/electrician/lighting.webp') },
+    { title: 'הכנה לעמדת טעינה', type: 'טעינת רכב', category: 'ev', challenge: 'מרחק מהלוח הראשי', result: 'תוואי מסודר ומוגן', service: 'ev', sample: true, image: assetUrl('profiles/electrician/ev-charging.webp') },
+    { title: 'בקרת בית חכם', type: 'בית חכם', category: 'smart-home', challenge: 'ריבוי מערכות', result: 'שליטה מאוחדת ונוחה', service: 'smart-home', sample: true, image: assetUrl('profiles/electrician/smart-home.webp') },
+    { title: 'חשמל לחנות בוטיק', type: 'מסחר וקמעונאות', category: 'retail', challenge: 'תאורת תצוגה ועומסים משתנים', result: 'חלוקה בטוחה ותצוגה מוארת היטב', service: 'business', sample: true, image: assetUrl('profiles/electrician/lighting.webp') },
+    { title: 'שדרוג תשתית משרד', type: 'משרד ועסקים', category: 'office', challenge: 'עמדות עבודה ללא תשתית מספקת', result: 'נקודות מסודרות ורציפות עבודה משופרת', service: 'business', sample: true, image: assetUrl('profiles/electrician/panel-work.webp') },
   ],
   testimonials: [
     { name: 'נועה, רמת גן', quote: 'הגיע בתיאום, הסביר כל שלב והשאיר את הבית נקי.', image: assetUrl('profiles/electrician/client-1.webp'), sample: true },
@@ -129,8 +133,8 @@ export const electricianProfile = {
     submitLabel: 'שליחת הפרטים',
     submittingLabel: 'שולחים…',
     fields: {
-      fullName: { label: 'שם מלא', required: true },
-      phone: { label: 'טלפון', required: true },
+      fullName: { label: 'שם מלא', required: true, input: { autoComplete: 'name' } },
+      phone: { label: 'טלפון', required: true, input: { type: 'tel', inputMode: 'tel', autoComplete: 'tel' } },
       workType: { label: 'סוג העבודה', placeholder: 'בחרו סוג עבודה', required: true },
       area: { label: 'אזור או עיר', required: true },
       urgency: { label: 'דחיפות', placeholder: 'בחרו רמת דחיפות', required: true },
@@ -147,6 +151,8 @@ export const electricianProfile = {
     canonicalUrl: 'https://delevski.github.io/professional-services-template/',
     socialImage: assetUrl('profiles/electrician/social-preview.jpg'),
     favicon: assetUrl('profiles/electrician/favicon.svg'),
+    touchIcon: assetUrl('profiles/electrician/apple-touch-icon.png'),
     locale: 'he_IL',
+    schemaType: 'Electrician',
   },
 };

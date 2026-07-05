@@ -41,6 +41,7 @@ p { line-height: 1.75; }
 .hero::before { position: absolute; inset: 0; background-image: linear-gradient(#fff08 1px, transparent 1px), linear-gradient(90deg, #fff08 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to left, #000, transparent 70%); content: ''; }
 .hero__grid { position: relative; display: grid; grid-template-columns: 1.25fr .75fr; align-items: center; gap: clamp(40px, 7vw, 100px); }
 .hero__lead { max-width: 640px; color: #d6d8d6; font-size: 1.2rem; }
+.demo-badge { display: inline-block; margin: 0 0 18px; padding: 7px 12px; border: 1px solid var(--amber); border-radius: 999px; color: #fff; background: #0005; font-weight: 800; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-block: 34px; }
 .icon-link { display: inline-flex; align-items: center; gap: 8px; padding: 12px; color: #fff; }
 .hero__proof { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 0; color: #e7e2da; list-style: none; }

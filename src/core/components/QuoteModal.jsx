@@ -107,7 +107,7 @@ export default function QuoteModal({ open, onClose, profile, submitLeadFn = subm
         {Object.entries(form.fields).map(([key, field]) => {
           const inputId = `quote-${key}`;
           const errorId = `${inputId}-error`;
-          const accessibility = { id: inputId, name: key, 'aria-invalid': session.errors[key] ? 'true' : undefined, 'aria-describedby': session.errors[key] ? errorId : undefined };
+          const accessibility = { id: inputId, name: key, ...field.input, 'aria-invalid': session.errors[key] ? 'true' : undefined, 'aria-describedby': session.errors[key] ? errorId : undefined };
           return <div className="form-field" key={key}><label htmlFor={inputId}>{field.label}</label>
             {key === 'description' ? <textarea {...accessibility} /> : key === 'workType' ? <select {...accessibility} defaultValue=""><option value="">{field.placeholder}</option>{form.workTypes.map(option => <option key={option}>{option}</option>)}</select> : key === 'urgency' ? <select {...accessibility} defaultValue=""><option value="">{field.placeholder}</option>{form.urgencyOptions.map(option => <option key={option}>{option}</option>)}</select> : <input {...accessibility} />}
             {session.errors[key] ? <span id={errorId} className="field-error" role="alert">{session.errors[key]}</span> : null}

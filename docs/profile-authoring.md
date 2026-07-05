@@ -18,10 +18,11 @@ In the new `profile.js`, replace all of the following rather than leaving electr
 - hero, trust points, services, projects, testimonials, packages, professional biography, statistics, credentials, service areas, hours, FAQ, and footer copy
 - every name, claim, price, certification, warranty, location, phone number, WhatsApp number, email address, and prepared message
 - form headings, field labels, work types, urgency choices, validation copy, local-storage key, and WhatsApp summary labels
-- SEO title, description, locale, canonical URL, favicon, and social image
+- SEO title, description, locale, canonical URL, favicon, touch icon, social image, and supported schema type. The Vite HTML transform generates title, canonical, Open Graph, Twitter, icons, and JSON-LD from this one profile source; do not hand-edit `index.html` metadata.
+- privacy label, anchor, heading, and policy text. Replace the demo local-storage explanation with the business's reviewed production privacy policy and lead-provider disclosures before launch.
 - domain icon keys used by the profile
 
-Update the static metadata and JSON-LD in `index.html` to match. Do not publish sample claims or add ratings unless they are real, supportable business data.
+Do not add ratings to structured data unless they are real and supportable.
 
 ## 3. Replace all assets
 
