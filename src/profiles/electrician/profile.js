@@ -131,9 +131,9 @@ export const electricianProfile = {
     fields: {
       fullName: { label: 'שם מלא', required: true },
       phone: { label: 'טלפון', required: true },
-      workType: { label: 'סוג העבודה', required: true },
+      workType: { label: 'סוג העבודה', placeholder: 'בחרו סוג עבודה', required: true },
       area: { label: 'אזור או עיר', required: true },
-      urgency: { label: 'דחיפות', required: true },
+      urgency: { label: 'דחיפות', placeholder: 'בחרו רמת דחיפות', required: true },
       description: { label: 'תיאור קצר', required: false },
     },
     workTypes: ['תקלה', 'לוח חשמל', 'תאורה ונקודות', 'עמדת טעינה', 'בית חכם', 'תחזוקת עסק', 'אחר'],

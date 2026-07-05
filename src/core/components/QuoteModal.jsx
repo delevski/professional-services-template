@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import Button from './Button';
 import { submitLead } from '../services/leads';
@@ -9,15 +9,40 @@ function composeMessage(lead, copy) {
   return [copy.intro, `${labels.name}: ${lead.name}`, `${labels.phone}: ${lead.phone}`, `${labels.workType}: ${lead.workType}`, `${labels.city}: ${lead.city}`, `${labels.urgency}: ${lead.urgency}`, lead.description ? `${labels.description}: ${lead.description}` : ''];
 }
 
+const initialSession = { errors: {}, status: 'idle', manualUrl: '', formSession: 0 };
+
+function sessionReducer(state, action) {
+  switch (action.type) {
+    case 'validation': return { ...state, errors: action.errors };
+    case 'submitting': return { ...state, status: 'submitting' };
+    case 'success': return { ...state, status: 'success', manualUrl: action.url };
+    case 'failure': return { ...state, status: 'failure' };
+    case 'closed':
+      if (state.status === 'success') return { ...initialSession, formSession: state.formSession + 1 };
+      if (state.status === 'submitting') return { ...state, status: 'idle' };
+      return state;
+    default: return state;
+  }
+}
+
 export default function QuoteModal({ open, onClose, profile, submitLeadFn = submitLead }) {
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
   const openerRef = useRef(null);
-  const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('idle');
-  const [manualUrl, setManualUrl] = useState('');
+  const generationRef = useRef(0);
+  const openRef = useRef(open);
+  const [previousOpen, setPreviousOpen] = useState(open);
+  const [session, dispatch] = useReducer(sessionReducer, initialSession);
   const labels = profile.ui.modal;
   const form = profile.leadForm;
+  openRef.current = open;
+  if (open !== previousOpen) {
+    setPreviousOpen(open);
+    if (!open) {
+      generationRef.current += 1;
+      dispatch({ type: 'closed' });
+    }
+  }
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -25,33 +50,36 @@ export default function QuoteModal({ open, onClose, profile, submitLeadFn = subm
       openerRef.current = document.activeElement;
       if (!dialog.open) dialog.showModal();
       closeRef.current?.focus();
-    } else if (dialog.open) {
-      dialog.close();
+    } else {
+      if (dialog.open) dialog.close();
+      queueMicrotask(() => openerRef.current?.focus());
     }
   }, [open]);
 
-  const requestClose = () => {
-    onClose();
-    queueMicrotask(() => openerRef.current?.focus());
-  };
+  const requestClose = () => onClose();
 
   const handleSubmit = async event => {
     event.preventDefault();
     const values = Object.fromEntries(new FormData(event.currentTarget));
-    const fieldErrors = Object.fromEntries(Object.entries(form.fields).filter(([, field]) => field.required).filter(([key]) => !String(values[key] ?? '').trim()).map(([key]) => [key, labels.requiredError]));
-    setErrors(fieldErrors);
+    const fieldErrors = {};
+    for (const [key, field] of Object.entries(form.fields)) {
+      if (field.required && !String(values[key] ?? '').trim()) fieldErrors[key] = labels.requiredError;
+    }
+    dispatch({ type: 'validation', errors: fieldErrors });
     if (Object.keys(fieldErrors).length) return;
 
     const lead = { name: values.fullName, phone: values.phone, workType: values.workType, city: values.area, urgency: values.urgency, description: values.description, storageKey: form.demoStorageKey };
-    setStatus('submitting');
+    const generation = ++generationRef.current;
+    dispatch({ type: 'submitting' });
     try {
       await submitLeadFn(lead);
+      if (!openRef.current || generation !== generationRef.current) return;
       const url = buildWhatsAppUrl({ messageParts: composeMessage(lead, form.whatsappMessage) }, profile.contact.whatsapp);
-      setManualUrl(url);
-      setStatus('success');
+      dispatch({ type: 'success', url });
       window.open(url, '_blank', 'noopener,noreferrer');
     } catch {
-      setStatus('failure');
+      if (!openRef.current || generation !== generationRef.current) return;
+      dispatch({ type: 'failure' });
     }
   };
 
@@ -59,20 +87,20 @@ export default function QuoteModal({ open, onClose, profile, submitLeadFn = subm
     <div className="modal">
       <button ref={closeRef} type="button" className="modal__close" onClick={requestClose} aria-label={labels.closeLabel}><X /></button>
       <p className="eyebrow">{labels.eyebrow}</p><h2 id="quote-title">{form.heading}</h2><p>{labels.description}</p>
-      <form noValidate onSubmit={handleSubmit}>
+      <form key={session.formSession} noValidate onSubmit={handleSubmit}>
         {Object.entries(form.fields).map(([key, field]) => {
           const inputId = `quote-${key}`;
           const errorId = `${inputId}-error`;
-          const accessibility = { id: inputId, name: key, 'aria-invalid': errors[key] ? 'true' : undefined, 'aria-describedby': errors[key] ? errorId : undefined };
+          const accessibility = { id: inputId, name: key, 'aria-invalid': session.errors[key] ? 'true' : undefined, 'aria-describedby': session.errors[key] ? errorId : undefined };
           return <div className="form-field" key={key}><label htmlFor={inputId}>{field.label}</label>
-            {key === 'description' ? <textarea {...accessibility} /> : key === 'workType' ? <select {...accessibility} defaultValue=""><option value="" />{form.workTypes.map(option => <option key={option}>{option}</option>)}</select> : key === 'urgency' ? <select {...accessibility} defaultValue=""><option value="" />{form.urgencyOptions.map(option => <option key={option}>{option}</option>)}</select> : <input {...accessibility} />}
-            {errors[key] ? <span id={errorId} className="field-error" role="alert">{errors[key]}</span> : null}
+            {key === 'description' ? <textarea {...accessibility} /> : key === 'workType' ? <select {...accessibility} defaultValue=""><option value="">{field.placeholder}</option>{form.workTypes.map(option => <option key={option}>{option}</option>)}</select> : key === 'urgency' ? <select {...accessibility} defaultValue=""><option value="">{field.placeholder}</option>{form.urgencyOptions.map(option => <option key={option}>{option}</option>)}</select> : <input {...accessibility} />}
+            {session.errors[key] ? <span id={errorId} className="field-error" role="alert">{session.errors[key]}</span> : null}
           </div>;
         })}
-        <Button type="submit" disabled={status === 'submitting'}>{status === 'submitting' ? form.submittingLabel : form.submitLabel}</Button>
+        <Button type="submit" disabled={session.status === 'submitting'}>{session.status === 'submitting' ? form.submittingLabel : form.submitLabel}</Button>
       </form>
-      {status === 'failure' ? <p role="alert">{labels.failureMessage}</p> : null}
-      {status === 'success' ? <div role="status"><p>{labels.successMessage}</p><a href={manualUrl} target="_blank" rel="noreferrer">{labels.manualWhatsappLabel}</a></div> : null}
+      {session.status === 'failure' ? <p role="alert">{labels.failureMessage}</p> : null}
+      {session.status === 'success' ? <div role="status"><p>{labels.successMessage}</p><a href={session.manualUrl} target="_blank" rel="noreferrer">{labels.manualWhatsappLabel}</a></div> : null}
     </div>
   </dialog>;
 }

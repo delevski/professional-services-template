@@ -9,8 +9,8 @@ const profile = {
   leadForm: {
     heading: 'Request a quote', submitLabel: 'Send details', submittingLabel: 'Sending…',
     fields: {
-      fullName: { label: 'Full name', required: true }, phone: { label: 'Phone', required: true }, workType: { label: 'Work type', required: true },
-      area: { label: 'City', required: true }, urgency: { label: 'Urgency', required: true }, description: { label: 'Description', required: false },
+      fullName: { label: 'Full name', required: true }, phone: { label: 'Phone', required: true }, workType: { label: 'Work type', placeholder: 'Choose work type', required: true },
+      area: { label: 'City', required: true }, urgency: { label: 'Urgency', placeholder: 'Choose urgency', required: true }, description: { label: 'Description', required: false },
     },
     workTypes: ['Repair', 'Install'], urgencyOptions: ['Normal', 'Urgent'], demoStorageKey: 'quote-test-leads',
     whatsappMessage: { intro: 'New request', labels: { name: 'Name', phone: 'Phone', workType: 'Work', city: 'City', urgency: 'Urgency', description: 'Details' } },
@@ -22,7 +22,13 @@ afterEach(() => vi.restoreAllMocks());
 
 function Harness({ submitLeadFn = vi.fn().mockResolvedValue({ id: '1', storedAt: 'now' }) }) {
   const [open, setOpen] = useState(false);
-  return <><button type="button" onClick={() => setOpen(true)}>Open quote</button><QuoteModal open={open} onClose={() => setOpen(false)} profile={profile} submitLeadFn={submitLeadFn} /></>;
+  return <><button type="button" onClick={() => setOpen(true)}>Open quote</button><button type="button" onClick={() => setOpen(false)}>Force close</button><QuoteModal open={open} onClose={() => setOpen(false)} profile={profile} submitLeadFn={submitLeadFn} /></>;
+}
+
+function deferred() {
+  let resolve;
+  const promise = new Promise(next => { resolve = next; });
+  return { promise, resolve };
 }
 
 async function fillRequired(user) {
@@ -44,14 +50,29 @@ it('has an accessible dialog name and reports required fields', async () => {
 
 it('persists explicitly before opening WhatsApp and offers a manual continuation link', async () => {
   const user = userEvent.setup();
-  const submitLeadFn = vi.fn().mockResolvedValue({ id: '1', storedAt: 'now' });
+  const persistence = deferred();
+  const submitLeadFn = vi.fn(() => persistence.promise);
   const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
   render(<Harness submitLeadFn={submitLeadFn} />); await user.click(screen.getByRole('button', { name: 'Open quote' })); await fillRequired(user);
   expect(submitLeadFn).not.toHaveBeenCalled(); expect(openSpy).not.toHaveBeenCalled();
   await user.click(screen.getByRole('button', { name: 'Send details' }));
   await waitFor(() => expect(submitLeadFn).toHaveBeenCalledTimes(1));
-  expect(openSpy).toHaveBeenCalledTimes(1);
+  expect(openSpy).not.toHaveBeenCalled();
+  persistence.resolve({ id: '1', storedAt: 'now' });
+  await waitFor(() => expect(openSpy).toHaveBeenCalledTimes(1));
   expect(screen.getByRole('link', { name: 'Continue manually' })).toHaveAttribute('href', expect.stringMatching(/^https:\/\/wa\.me\//));
+});
+
+it('ignores persistence completion after the modal closes', async () => {
+  const user = userEvent.setup(); const persistence = deferred();
+  const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+  render(<Harness submitLeadFn={vi.fn(() => persistence.promise)} />); await user.click(screen.getByRole('button', { name: 'Open quote' })); await fillRequired(user);
+  await user.click(screen.getByRole('button', { name: 'Send details' }));
+  await user.click(screen.getByRole('button', { name: 'Close' }));
+  persistence.resolve({ id: '1', storedAt: 'now' });
+  await user.click(screen.getByRole('button', { name: 'Open quote' }));
+  expect(openSpy).not.toHaveBeenCalled();
+  expect(screen.queryByText('Saved successfully.')).not.toBeInTheDocument();
 });
 
 it('retains values and does not open WhatsApp when persistence fails', async () => {
@@ -68,4 +89,20 @@ it('closes on Escape and restores focus to the opener', async () => {
   fireEvent(screen.getByRole('dialog', { name: 'Request a quote' }), new Event('cancel', { bubbles: false, cancelable: true }));
   await waitFor(() => expect(opener).toHaveFocus());
   expect(screen.queryByRole('dialog', { name: 'Request a quote' })).not.toBeInTheDocument();
+});
+
+it('restores focus when the controlled open prop changes externally', async () => {
+  const user = userEvent.setup(); render(<Harness />); const opener = screen.getByRole('button', { name: 'Open quote' });
+  await user.click(opener); await user.click(screen.getByRole('button', { name: 'Force close' }));
+  await waitFor(() => expect(opener).toHaveFocus());
+});
+
+it('starts with an empty form and no success state when reopened after success', async () => {
+  const user = userEvent.setup(); vi.spyOn(window, 'open').mockImplementation(() => null); render(<Harness />);
+  await user.click(screen.getByRole('button', { name: 'Open quote' })); await fillRequired(user); await user.click(screen.getByRole('button', { name: 'Send details' }));
+  expect(await screen.findByText('Saved successfully.')).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Close' })); await user.click(screen.getByRole('button', { name: 'Open quote' }));
+  expect(screen.getByLabelText('Full name')).toHaveValue('');
+  expect(screen.queryByText('Saved successfully.')).not.toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: 'Continue manually' })).not.toBeInTheDocument();
 });
