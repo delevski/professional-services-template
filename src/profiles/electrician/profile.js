@@ -20,7 +20,7 @@ export const electricianProfile = {
     trust: { eyebrow: 'הסטנדרט המקצועי', heading: 'למה לבחור בנו' },
     services: { eyebrow: 'מומחיות מקצה לקצה', heading: 'שירותים' },
     projects: { eyebrow: 'עבודה שמדברת בעד עצמה', heading: 'פרויקטים נבחרים', challengeLabel: 'האתגר', resultLabel: 'התוצאה' },
-    testimonials: { eyebrow: 'לקוחות מספרים', heading: 'המלצות לדוגמה', sampleLabel: 'תוכן לדוגמה' },
+    testimonials: { eyebrow: 'לקוחות מספרים', heading: 'המלצות לדוגמה', sampleLabel: 'תוכן לדוגמה', previousLabel: 'להמלצה הקודמת', nextLabel: 'להמלצה הבאה', positionTemplate: '{current} מתוך {total}' },
     packages: { eyebrow: 'שקיפות מתחילה כאן', heading: 'מחירים התחלתיים', actionLabel: 'לקבלת הצעה', note: 'המחירים באתר הם לדוגמה בלבד. מחיר סופי ייקבע לאחר אבחון.' },
     professional: { eyebrow: 'המקצוען מאחורי העבודה', sampleSuffix: 'לדוגמה' },
     serviceArea: { eyebrow: 'מגיעים אליכם', hoursLabel: 'שעות פעילות', urgentLabel: 'קריאה דחופה' },

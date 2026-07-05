@@ -59,3 +59,17 @@ it('focuses the modal and restores focus to its trigger when closed', async () =
   await user.click(screen.getByRole('button', { name: 'סגירה' }));
   expect(trigger).toHaveFocus();
 });
+
+it('navigates testimonials with profile-labelled controls and announces position', async () => {
+  const user = userEvent.setup();
+  render(<App />);
+  const next = screen.getByRole('button', { name: ACTIVE_PROFILE.sections.testimonials.nextLabel });
+  const previous = screen.getByRole('button', { name: ACTIVE_PROFILE.sections.testimonials.previousLabel });
+  expect(screen.getByRole('status')).toHaveTextContent('1 מתוך 5');
+  await user.click(next);
+  expect(screen.getByRole('status')).toHaveTextContent('2 מתוך 5');
+  await user.click(previous);
+  expect(screen.getByRole('status')).toHaveTextContent('1 מתוך 5');
+  await user.click(previous);
+  expect(screen.getByRole('status')).toHaveTextContent('5 מתוך 5');
+});

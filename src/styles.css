@@ -69,7 +69,12 @@ p { line-height: 1.75; }
 .project-card dt { color: #fff; font-weight: 700; }
 .project-card dd { margin: 5px 0 0; }
 .testimonial-row { display: grid; grid-template-columns: repeat(5, minmax(250px, 1fr)); gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; }
+.testimonial-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.testimonial-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+.testimonial-controls button { display: grid; width: 44px; aspect-ratio: 1; place-items: center; color: #fff; border: 0; background: var(--navy); cursor: pointer; }
+.testimonial-controls span { min-width: 72px; color: #52616a; text-align: center; }
 blockquote { min-height: 300px; margin: 0; padding: 30px; color: #fff; background: var(--navy); scroll-snap-align: start; }
+blockquote.is-selected { box-shadow: inset 0 0 0 2px var(--amber); }
 blockquote > svg { color: var(--amber); }
 blockquote p { margin-block: 28px; font-size: 1.15rem; }
 blockquote footer small { display: block; color: #aeb8bd; }
@@ -151,6 +156,8 @@ blockquote footer small { display: block; color: #aeb8bd; }
   .portrait { min-height: 430px; }
   .project-card dl { grid-template-columns: 1fr; }
   .floating { inset: auto auto 14px 14px; }
+  .testimonial-heading { align-items: start; flex-direction: column; }
+  .testimonial-heading h2, .testimonial-controls { margin-bottom: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
