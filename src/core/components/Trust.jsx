@@ -1,3 +1,3 @@
-import { ShieldCheck, ScanSearch, BadgeDollarSign, Clock3 } from 'lucide-react';
-const icons = [ShieldCheck, ScanSearch, BadgeDollarSign, Clock3];
-export default function Trust({ items }) { return <section className="section section--light" aria-labelledby="trust-title"><div className="shell"><p className="eyebrow">הסטנדרט המקצועי</p><h2 id="trust-title">למה לבחור בנו</h2><div className="card-grid card-grid--four">{items.map((item, i) => { const Icon = icons[i % icons.length]; return <article className="feature-card" key={item.title}><Icon aria-hidden="true" /><span>0{i + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>; })}</div></div></section>; }
+import ProfileIcon from './ProfileIcon';
+import { useReveal } from '../hooks/useReveal';
+export default function Trust({ items, copy }) { const reveal = useReveal(); return <section {...reveal} className={`section section--light ${reveal.className}`} aria-labelledby="trust-title"><div className="shell"><p className="eyebrow">{copy.eyebrow}</p><h2 id="trust-title">{copy.heading}</h2><div className="card-grid card-grid--four">{items.map((item, i) => <article className="feature-card" key={item.title}><ProfileIcon name={item.icon} aria-hidden="true" /><span>0{i + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></div></section>; }

@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
-
-:root { font-family: 'Heebo', system-ui, sans-serif; color: #182630; background: #101820; font-synthesis: none; }
+:root { font-family: Arial, 'Noto Sans Hebrew', system-ui, sans-serif; color: #182630; background: #101820; font-synthesis: none; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: var(--surface, #f4f0e8); }
@@ -9,6 +7,8 @@ a { color: inherit; text-decoration: none; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
 .site { overflow: clip; background: var(--surface); }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.is-visible { opacity: 1; transform: none; }
 .shell { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
 .section { padding-block: clamp(76px, 10vw, 140px); background: var(--surface); }
 .section--light { background: #fffaf2; }
@@ -155,4 +155,5 @@ blockquote footer small { display: block; color: #aeb8bd; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
 }

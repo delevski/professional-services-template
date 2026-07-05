@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { ACTIVE_PROFILE } from './profiles';
 import Header from './core/components/Header';
@@ -17,30 +17,35 @@ import FloatingActions from './core/components/FloatingActions';
 import Button from './core/components/Button';
 import { useScrollUI } from './core/hooks/useScrollUI';
 
-function QuoteModal({ profile, open, onClose }) {
-  useEffect(() => {
-    if (!open) return undefined;
-    const onKey = event => event.key === 'Escape' && onClose();
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
-  if (!open) return null;
-  return <dialog className="modal-backdrop" open aria-labelledby="quote-title"><div className="modal"><button type="button" className="modal__close" onClick={onClose} aria-label="סגירה"><X /></button><p className="eyebrow">פרטים ראשוניים</p><h2 id="quote-title">{profile.leadForm.heading}</h2><p>השאירו פרטים ונחזור אליכם לתיאום. זהו טופס הדגמה.</p><form onSubmit={event => event.preventDefault()}>{Object.entries(profile.leadForm.fields).map(([key, field]) => key === 'description' ? <label key={key}>{field.label}<textarea name={key} /></label> : <label key={key}>{field.label}<input name={key} required={field.required} /></label>)}<Button type="submit">{profile.leadForm.submitLabel}</Button></form></div></dialog>;
+function QuoteModal({ profile, dialogRef, onClose }) {
+  const closeRef = useRef(null);
+  const labels = profile.ui.modal;
+  const requestClose = () => onClose();
+  return <dialog ref={dialogRef} className="modal-backdrop" aria-labelledby="quote-title" onCancel={event => { event.preventDefault(); requestClose(); }}><div className="modal"><button ref={closeRef} type="button" className="modal__close" onClick={requestClose} aria-label={labels.closeLabel}><X /></button><p className="eyebrow">{labels.eyebrow}</p><h2 id="quote-title">{profile.leadForm.heading}</h2><p>{labels.description}</p><form onSubmit={event => event.preventDefault()}>{Object.entries(profile.leadForm.fields).map(([key, field]) => key === 'description' ? <label key={key}>{field.label}<textarea name={key} /></label> : <label key={key}>{field.label}<input name={key} required={field.required} /></label>)}<Button type="submit">{profile.leadForm.submitLabel}</Button></form></div></dialog>;
 }
 
 export default function App() {
   const profile = ACTIVE_PROFILE;
-  const [quoteOpen, setQuoteOpen] = useState(false);
+  const dialogRef = useRef(null);
+  const quoteTriggerRef = useRef(null);
   const scroll = useScrollUI();
   useEffect(() => {
     document.documentElement.lang = profile.theme.language;
     document.documentElement.dir = profile.theme.direction;
   }, [profile]);
-  const onQuote = () => setQuoteOpen(true);
+  const onQuote = event => {
+    quoteTriggerRef.current = event?.currentTarget || document.activeElement;
+    dialogRef.current?.showModal();
+    dialogRef.current?.querySelector('.modal__close')?.focus();
+  };
+  const closeQuote = useCallback(() => {
+    dialogRef.current?.close();
+    quoteTriggerRef.current?.focus();
+  }, []);
   const colors = profile.theme.colors;
   return <div className="site" style={{ '--midnight': colors.midnight, '--navy': colors.navy, '--surface': colors.surface, '--copper': colors.copper, '--amber': colors.amber }}>
     <Header profile={profile} onQuote={onQuote} scrolled={scroll.scrolled} />
-    <main><Hero profile={profile} onQuote={onQuote} /><Trust items={profile.trust} /><Services services={profile.services} onQuote={onQuote} /><Projects projects={profile.projects} /><Testimonials testimonials={profile.testimonials} /><Packages packages={profile.packages} onQuote={onQuote} /><Professional professional={profile.professional} /><ServiceArea serviceArea={profile.serviceArea} /><Faq items={profile.faq} /><FinalCta profile={profile} onQuote={onQuote} /></main>
-    <Footer profile={profile} /><FloatingActions contact={profile.contact} progress={scroll.progress} /><QuoteModal profile={profile} open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+    <main><Hero profile={profile} onQuote={onQuote} /><Trust items={profile.trust} copy={profile.sections.trust} /><Services services={profile.services} copy={profile.sections.services} onQuote={onQuote} /><Projects projects={profile.projects} copy={profile.sections.projects} /><Testimonials testimonials={profile.testimonials} copy={profile.sections.testimonials} /><Packages packages={profile.packages} copy={profile.sections.packages} onQuote={onQuote} /><Professional professional={profile.professional} copy={profile.sections.professional} placeholderInitials={profile.brand.placeholderInitials} /><ServiceArea serviceArea={profile.serviceArea} copy={profile.sections.serviceArea} /><Faq items={profile.faq} copy={profile.sections.faq} /><FinalCta profile={profile} copy={profile.sections.finalCta} onQuote={onQuote} /></main>
+    <Footer profile={profile} /><FloatingActions contact={profile.contact} labels={profile.ui.floating} progress={scroll.progress} /><QuoteModal profile={profile} dialogRef={dialogRef} onClose={closeQuote} />
   </div>;
 }

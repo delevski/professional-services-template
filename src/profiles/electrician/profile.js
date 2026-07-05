@@ -3,10 +3,29 @@ import { assetUrl } from '../../core/utils/assets';
 export const electricianProfile = {
   id: 'electrician',
   brand: {
+    icon: 'zap',
+    placeholderInitials: 'OL',
     name: 'אורי לוי',
     businessName: 'אורי לוי — חשמל פרימיום',
     descriptor: 'חשמלאי מוסמך לבתים ולעסקים',
     sampleDisclosure: 'אתר הדגמה — כל התוכן העסקי בדיוני ולדוגמה בלבד, לרבות שמות, הסמכות, מחירים, פרטי קשר, פרויקטים ותוצאות, המלצות, שנות ניסיון, מספר פרויקטים וכל נתונים כמותיים.',
+  },
+  ui: {
+    navigation: { mainLabel: 'ניווט ראשי', footerLabel: 'ניווט תחתון', openLabel: 'פתיחת תפריט', closeLabel: 'סגירת תפריט' },
+    quote: { headerLabel: 'פתיחת טופס הצעה', finalLabel: 'פתיחת טופס יצירת קשר' },
+    floating: { phoneLabel: 'התקשרו עכשיו', whatsappLabel: 'שלחו WhatsApp', topLabel: 'חזרה לראש העמוד' },
+    modal: { eyebrow: 'פרטים ראשוניים', description: 'השאירו פרטים ונחזור אליכם לתיאום. זהו טופס הדגמה.', closeLabel: 'סגירה' },
+  },
+  sections: {
+    trust: { eyebrow: 'הסטנדרט המקצועי', heading: 'למה לבחור בנו' },
+    services: { eyebrow: 'מומחיות מקצה לקצה', heading: 'שירותים' },
+    projects: { eyebrow: 'עבודה שמדברת בעד עצמה', heading: 'פרויקטים נבחרים', challengeLabel: 'האתגר', resultLabel: 'התוצאה' },
+    testimonials: { eyebrow: 'לקוחות מספרים', heading: 'המלצות לדוגמה', sampleLabel: 'תוכן לדוגמה' },
+    packages: { eyebrow: 'שקיפות מתחילה כאן', heading: 'מחירים התחלתיים', actionLabel: 'לקבלת הצעה', note: 'המחירים באתר הם לדוגמה בלבד. מחיר סופי ייקבע לאחר אבחון.' },
+    professional: { eyebrow: 'המקצוען מאחורי העבודה', sampleSuffix: 'לדוגמה' },
+    serviceArea: { eyebrow: 'מגיעים אליכם', hoursLabel: 'שעות פעילות', urgentLabel: 'קריאה דחופה' },
+    faq: { eyebrow: 'מידע שימושי', heading: 'שאלות ותשובות', description: 'כל מה שכדאי לדעת לפני שמתאמים עבודה.' },
+    finalCta: { eyebrow: 'מתחילים בשיחה קצרה' },
   },
   theme: {
     colors: {
@@ -38,18 +57,18 @@ export const electricianProfile = {
     imageAlt: 'חשמלאי מקצועי בסביבת מגורים מודרנית — תמונת הדגמה',
   },
   trust: [
-    { title: 'בטיחות ללא פשרות', text: 'עבודה מסודרת לפי נהלי בטיחות ובדיקות סיום.' },
-    { title: 'אבחון מדויק', text: 'הסבר בהיר של התקלה והפתרון לפני תחילת העבודה.' },
-    { title: 'שקיפות במחיר', text: 'הצעת מחיר מסודרת ואישור לפני כל שינוי.' },
-    { title: 'עמידה בזמנים', text: 'תיאום חלון הגעה ועדכון אם התנאים משתנים.' },
+    { icon: 'shieldCheck', title: 'בטיחות ללא פשרות', text: 'עבודה מסודרת לפי נהלי בטיחות ובדיקות סיום.' },
+    { icon: 'scanSearch', title: 'אבחון מדויק', text: 'הסבר בהיר של התקלה והפתרון לפני תחילת העבודה.' },
+    { icon: 'badgeDollarSign', title: 'שקיפות במחיר', text: 'הצעת מחיר מסודרת ואישור לפני כל שינוי.' },
+    { icon: 'clock', title: 'עמידה בזמנים', text: 'תיאום חלון הגעה ועדכון אם התנאים משתנים.' },
   ],
   services: [
-    { id: 'faults', title: 'איתור ותיקון תקלות', description: 'אבחון קצרים, עומסים ותקלות חוזרות.', cta: 'לתיאום אבחון' },
-    { id: 'panels', title: 'לוחות חשמל', description: 'שדרוג, חלוקה וסימון מסודר של לוחות.', cta: 'לבדיקת הלוח' },
-    { id: 'lighting', title: 'התקנת נקודות ותאורה', description: 'תכנון והתקנה נקייה למרחבי מגורים ועבודה.', cta: 'לתכנון התקנה' },
-    { id: 'ev', title: 'הכנה לעמדות טעינה', description: 'בדיקת תשתית והכנה מקצועית לעמדת טעינה.', cta: 'לבדיקת התאמה' },
-    { id: 'smart-home', title: 'בתים חכמים', description: 'תשתיות, בקרים ותרחישי תאורה נוחים.', cta: 'לייעוץ ראשוני' },
-    { id: 'business', title: 'תחזוקת עסקים', description: 'טיפול מונע ותיקונים למשרדים ולחנויות.', cta: 'לבניית מסלול שירות' },
+    { id: 'faults', icon: 'bolt', title: 'איתור ותיקון תקלות', description: 'אבחון קצרים, עומסים ותקלות חוזרות.', cta: 'לתיאום אבחון' },
+    { id: 'panels', icon: 'circuitBoard', title: 'לוחות חשמל', description: 'שדרוג, חלוקה וסימון מסודר של לוחות.', cta: 'לבדיקת הלוח' },
+    { id: 'lighting', icon: 'lightbulb', title: 'התקנת נקודות ותאורה', description: 'תכנון והתקנה נקייה למרחבי מגורים ועבודה.', cta: 'לתכנון התקנה' },
+    { id: 'ev', icon: 'car', title: 'הכנה לעמדות טעינה', description: 'בדיקת תשתית והכנה מקצועית לעמדת טעינה.', cta: 'לבדיקת התאמה' },
+    { id: 'smart-home', icon: 'housePlug', title: 'בתים חכמים', description: 'תשתיות, בקרים ותרחישי תאורה נוחים.', cta: 'לייעוץ ראשוני' },
+    { id: 'business', icon: 'briefcase', title: 'תחזוקת עסקים', description: 'טיפול מונע ותיקונים למשרדים ולחנויות.', cta: 'לבניית מסלול שירות' },
   ],
   projects: [
     { title: 'שדרוג לוח בדירה', type: 'מגורים', challenge: 'לוח ישן ללא סימון', result: 'חלוקה ברורה ותשתית מוכנה להרחבה', service: 'panels', image: assetUrl('profiles/electrician/project-panel.webp') },
