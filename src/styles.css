@@ -77,6 +77,8 @@ blockquote { min-height: 300px; margin: 0; padding: 30px; color: #fff; backgroun
 blockquote.is-selected { box-shadow: inset 0 0 0 2px var(--amber); }
 blockquote > svg { color: var(--amber); }
 blockquote p { margin-block: 28px; font-size: 1.15rem; }
+blockquote footer { display: flex; align-items: center; gap: 14px; }
+blockquote footer img { width: 72px; height: 72px; flex: 0 0 72px; border: 2px solid #ffffff22; border-radius: 50%; object-fit: cover; }
 blockquote footer small { display: block; color: #aeb8bd; }
 .price-card { display: flex; min-height: 390px; flex-direction: column; }
 .price-card.is-featured { color: #fff; background: var(--navy); transform: translateY(-14px); }

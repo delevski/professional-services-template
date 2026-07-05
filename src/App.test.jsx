@@ -73,3 +73,13 @@ it('navigates testimonials with profile-labelled controls and announces position
   await user.click(previous);
   expect(screen.getByRole('status')).toHaveTextContent('5 מתוך 5');
 });
+
+it('renders the profile testimonial portrait URL as a lazy decorative image', () => {
+  render(<App />);
+  const portrait = document.querySelector('.testimonial-row blockquote img');
+  expect(portrait).toHaveAttribute('src', ACTIVE_PROFILE.testimonials[0].image);
+  expect(portrait).toHaveAttribute('loading', 'lazy');
+  expect(portrait).toHaveAttribute('width', '72');
+  expect(portrait).toHaveAttribute('height', '72');
+  expect(portrait).toHaveAttribute('alt', '');
+});
