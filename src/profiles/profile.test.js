@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { createElement } from 'react';
+import App from '../App';
 import { ACTIVE_PROFILE } from './index';
 
 describe('active professional profile', () => {
@@ -12,5 +15,17 @@ describe('active professional profile', () => {
     for (const key of ['brand','theme','navigation','hero','trust','services','projects','testimonials','packages','professional','serviceArea','faq','contact','leadForm','seo']) {
       expect(ACTIVE_PROFILE[key]).toBeTruthy();
     }
+  });
+
+  it('labels every business claim as fictional sample content', () => {
+    expect(ACTIVE_PROFILE.brand.sampleDisclosure).toMatch(/כל התוכן העסקי/);
+    expect(ACTIVE_PROFILE.brand.sampleDisclosure).toMatch(/פרויקטים ותוצאות/);
+    expect(ACTIVE_PROFILE.brand.sampleDisclosure).toMatch(/ניסיון.*נתונים כמותיים/);
+  });
+
+  it('renders the profile disclosure visibly', () => {
+    render(createElement(App));
+
+    expect(screen.getByRole('note')).toHaveTextContent(ACTIVE_PROFILE.brand.sampleDisclosure);
   });
 });

@@ -19,10 +19,15 @@ function ContactSection({ profile }) {
   );
 }
 
+function SampleDisclosure({ profile }) {
+  return <aside role="note">{profile.brand.sampleDisclosure}</aside>;
+}
+
 export default function App() {
   return (
     <main>
       <HeroSection profile={ACTIVE_PROFILE} />
+      <SampleDisclosure profile={ACTIVE_PROFILE} />
       <ContactSection profile={ACTIVE_PROFILE} />
     </main>
   );
