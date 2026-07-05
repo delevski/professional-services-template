@@ -37,7 +37,7 @@ Create a new repository for the business. Set `base` in `vite.config.js` to `/<r
 
 ## 6. Configure leads safely
 
-Without `VITE_LEAD_ENDPOINT`, the demo adapter stores submissions only in the visitor's `localStorage`. For production, provide `VITE_LEAD_ENDPOINT` as a build-time environment variable backed by a secure HTTPS service. Validate and rate-limit on the server, configure CORS narrowly, avoid secrets in `VITE_*` variables, and test failure/retry behavior. Replace the sample phone and WhatsApp numbers before launch.
+Without `VITE_LEAD_ENDPOINT`, the demo adapter stores submissions only in the visitor's `localStorage`. Keep it unset for demo mode. For production, add `VITE_LEAD_ENDPOINT` as a GitHub Actions **repository variable** under Settings → Secrets and variables → Actions → Variables; the Pages workflow explicitly maps that variable into the Vite build. Every `VITE_*` value is embedded in client code and is publicly visible, so this endpoint must never be stored as a GitHub secret and must never contain credentials or secret tokens. Point it at a secure HTTPS service, validate and rate-limit on the server, configure CORS narrowly, and test failure/retry behavior. Replace the sample phone and WhatsApp numbers before launch.
 
 ## 7. Verify
 
@@ -56,5 +56,5 @@ Inspect the production build at desktop, tablet, and mobile widths. Test keyboar
 1. Push the project to the new business repository with `main` as the default branch.
 2. Keep `.github/workflows/pages.yml`; it tests and builds before deployment.
 3. In **Settings → Pages**, choose **GitHub Actions** as the source.
-4. Add `VITE_LEAD_ENDPOINT` through repository Actions configuration only if the production build needs it; never commit a secret.
+4. If production delivery is needed, add `VITE_LEAD_ENDPOINT` as an Actions repository variable. It is client-visible, never a secret; leave it unset for the demo adapter.
 5. Run the workflow, confirm both build and deploy jobs pass, and inspect the live canonical URL.

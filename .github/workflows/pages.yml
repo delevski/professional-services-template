@@ -30,6 +30,8 @@ jobs:
       - name: Test
         run: npm test -- --run
       - name: Build
+        env:
+          VITE_LEAD_ENDPOINT: ${{ vars.VITE_LEAD_ENDPOINT }}
         run: npm run build
       - name: Configure Pages
         uses: actions/configure-pages@v6

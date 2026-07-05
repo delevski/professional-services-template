@@ -26,4 +26,4 @@ npm test -- --run
 npm run build
 ```
 
-The demo stores leads in the visitor's browser when `VITE_LEAD_ENDPOINT` is unset. Configure a secure production endpoint at build time; never commit credentials or private endpoints.
+The demo stores leads in the visitor's browser when `VITE_LEAD_ENDPOINT` is unset. For production, add `VITE_LEAD_ENDPOINT` as a GitHub Actions **repository variable** (Settings → Secrets and variables → Actions → Variables). Vite embeds it in client code, so it is client-visible and must never contain a secret or credential. Keep the variable unset for demo mode.

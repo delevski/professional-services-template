@@ -91,6 +91,18 @@ it('closes on Escape and restores focus to the opener', async () => {
   expect(screen.queryByRole('dialog', { name: 'Request a quote' })).not.toBeInTheDocument();
 });
 
+it('keeps keyboard focus inside the open dialog', async () => {
+  const user = userEvent.setup(); render(<Harness />); await user.click(screen.getByRole('button', { name: 'Open quote' }));
+  const close = screen.getByRole('button', { name: 'Close' });
+  const submit = screen.getByRole('button', { name: 'Send details' });
+
+  close.focus();
+  await user.tab({ shift: true });
+  expect(submit).toHaveFocus();
+  await user.tab();
+  expect(close).toHaveFocus();
+});
+
 it('restores focus when the controlled open prop changes externally', async () => {
   const user = userEvent.setup(); render(<Harness />); const opener = screen.getByRole('button', { name: 'Open quote' });
   await user.click(opener); await user.click(screen.getByRole('button', { name: 'Force close' }));

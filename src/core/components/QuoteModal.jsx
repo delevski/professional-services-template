@@ -49,14 +49,30 @@ export default function QuoteModal({ open, onClose, profile, submitLeadFn = subm
     if (open) {
       openerRef.current = document.activeElement;
       if (!dialog.open) dialog.showModal();
+      dialog.addEventListener('keydown', trapFocus);
       closeRef.current?.focus();
     } else {
       if (dialog.open) dialog.close();
       queueMicrotask(() => openerRef.current?.focus());
     }
+    return () => dialog.removeEventListener('keydown', trapFocus);
   }, [open]);
 
   const requestClose = () => onClose();
+
+  function trapFocus(event) {
+    if (event.key !== 'Tab') return;
+    const focusable = [...dialogRef.current.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')];
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  }
 
   const handleSubmit = async event => {
     event.preventDefault();
