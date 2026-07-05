@@ -56,6 +56,8 @@ export const electricianProfile = {
     phoneAction: 'התקשרו עכשיו',
     whatsappAction: 'שלחו WhatsApp',
     image: assetUrl('profiles/electrician/hero.webp'),
+    video: assetUrl('profiles/electrician/hero-video.mp4'),
+    videoLabel: 'סרטון אווירה של חשמלאי מקצועי בעבודה',
     imageAlt: 'חשמלאי מקצועי בסביבת מגורים מודרנית — תמונת הדגמה',
   },
   trust: [

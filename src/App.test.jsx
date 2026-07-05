@@ -84,6 +84,22 @@ it('renders the profile testimonial portrait URL as a lazy decorative image', ()
   expect(portrait).toHaveAttribute('alt', '');
 });
 
+it('renders the profile hero video muted, looping, inline, and poster-backed', () => {
+  render(<App />);
+  const video = document.querySelector('.hero__media video');
+  expect(video).toHaveAttribute('src', ACTIVE_PROFILE.hero.video);
+  expect(video).toHaveAttribute('poster', ACTIVE_PROFILE.hero.image);
+  expect(video).toHaveAttribute('autoplay');
+  expect(video).toHaveProperty('muted', true);
+  expect(video).toHaveAttribute('loop');
+  expect(video).toHaveAttribute('playsinline');
+  expect(video).toHaveAttribute('preload', 'metadata');
+  expect(video).toHaveAttribute('aria-label', ACTIVE_PROFILE.hero.videoLabel);
+  expect(video).toHaveAttribute('tabindex', '-1');
+  expect(video).not.toHaveAttribute('aria-hidden');
+  expect(video).not.toHaveAttribute('role');
+});
+
 it('supports an accessible mobile navigation interaction', async () => {
   const user = userEvent.setup(); render(<App />);
   const toggle = screen.getByRole('button', { name: ACTIVE_PROFILE.ui.navigation.openLabel });
