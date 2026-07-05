@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://delevski.github.io/professional-services-template/sitemap.xml
