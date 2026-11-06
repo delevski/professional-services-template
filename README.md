@@ -1,31 +1,79 @@
 # Professional Services Template
 
-A reusable, profile-driven React website for independent professional-service businesses. The included electrician is a fictional Hebrew demo; names, credentials, prices, contact details, projects, and testimonials must be replaced before production use.
+**A reusable, profile-driven React website for independent service businesses: one shared core, and each profession (copy, theme, SEO, forms, assets) lives in its own profile folder. Ships with a fictional Hebrew electrician demo.**
 
-[![Electrician profile preview](https://delevski.github.io/professional-services-template/profiles/electrician/social-preview.jpg)](https://delevski.github.io/professional-services-template/)
+**Live (electrician demo):** https://delevski.github.io/professional-services-template/
 
-**[Open the live electrician preview](https://delevski.github.io/professional-services-template/)**
+[![Electrician profile preview](public/profiles/electrician/social-preview.jpg)](https://delevski.github.io/professional-services-template/)
 
-## Reusable by design
+## What it does
 
-Shared presentation and behavior live in `src/core/`. Each profession owns its copy, theme, configuration, form choices, SEO data, and assets in an isolated directory under `src/profiles/` and `public/profiles/`. `src/profiles/index.js` selects the active build profile.
+- **A complete service-business site** from one profile: hero (with a looping background video in the demo), trust points, services, projects, testimonials, packages, the professional's bio and credentials, service areas, FAQ and a final CTA.
+- **Quote request modal** with profile-defined work types and urgency choices. A request is saved as a lead and summarized into a **WhatsApp** message to the business.
+- **Build-time SEO from the profile**: title, description, locale, canonical URL, icons, social image and structured-data schema are written into `index.html` when the site builds.
+- **RTL / LTR and language per profile**: the electrician demo is Hebrew, right-to-left.
+- All names, credentials, prices, contact details, projects and testimonials in the demo are fictional.
 
-Every real business or profession should be deployed from a **separate repository and Pages site**. Do not mix client profiles or production lead data in this demo repository. See [Profile authoring](docs/profile-authoring.md) for the complete duplication and deployment checklist.
+## Architecture
 
-Discoverability metadata is generated at build time from the active profile's `seo`, brand, contact, and service-area data. The footer privacy copy is also profile-owned; replace the demo browser-storage notice with a reviewed production policy before collecting real leads.
+```mermaid
+flowchart LR
+  P[src/profiles/&lt;id&gt;/profile.js<br/>copy · theme · forms · SEO] --> IDX[src/profiles/index.js<br/>ACTIVE_PROFILE]
+  IDX --> CORE[src/core/components<br/>profession-neutral UI]
+  IDX --> VP[Vite plugin active-profile-html<br/>renders SEO into index.html]
+  CORE --> QM[QuoteModal] --> LD[core/services/leads.js]
+  LD -- "VITE_LEAD_ENDPOINT unset" --> LS[(localStorage preview)]
+  LD -- "VITE_LEAD_ENDPOINT set" --> EP[Lead endpoint]
+  QM --> WA[WhatsApp summary link]
+  A[public/profiles/&lt;id&gt;/<br/>images, video, icons] --> CORE
+```
 
-## Local development
+Key design decisions:
 
-```sh
+- **Core vs. profile separation.** Shared presentation and behaviour live in `src/core/`; each profession owns its data and assets in an isolated folder. Adding a profession never requires editing another one.
+- **One active profile per build.** `src/profiles/index.js` exports `ACTIVE_PROFILE`; a custom Vite plugin applies the deploy `base` to the profile's paths and renders its metadata into the HTML at build time.
+- **One repository per real business.** The template is meant to be copied: client profiles and production lead data are never mixed in the demo repo ([`docs/profile-authoring.md`](docs/profile-authoring.md) is the step-by-step guide).
+- **Leads behind one function.** `submitLead()` posts to `VITE_LEAD_ENDPOINT` when it is set (provided at build time from a repository variable in the Pages workflow) and falls back to local storage for the demo.
+- **Honest structured data.** The authoring guide forbids adding ratings to the schema unless they are real.
+- **Contracts in tests.** Vitest covers the app, the quote modal, profile shape, HTML rendering, lead service, WhatsApp links, asset paths, and that the deploy workflow passes the lead endpoint into the build.
+
+## Tech stack
+
+- **React + Vite** (custom HTML-transform plugin)
+- **lucide-react** icons, plain CSS
+- **Vitest**, Testing Library, jsdom
+- **GitHub Actions → GitHub Pages**
+
+## Project structure
+
+```
+src/core/          components, hooks, services (leads), utils (whatsapp, assets)
+src/profiles/      electrician/profile.js + index.js (ACTIVE_PROFILE)
+src/build/         profileHtml.js (build-time HTML + SEO rendering)
+public/profiles/   per-profile images, hero video, icons, social preview
+docs/              profile authoring and design specs
+```
+
+## Run locally
+
+```bash
 npm ci
 npm run dev
 ```
 
-Production verification:
+Production check:
 
-```sh
+```bash
 npm test -- --run
 npm run build
 ```
 
-The demo stores leads in the visitor's browser when `VITE_LEAD_ENDPOINT` is unset. For production, add `VITE_LEAD_ENDPOINT` as a GitHub Actions **repository variable** (Settings → Secrets and variables → Actions → Variables). Vite embeds it in client code, so it is client-visible and must never contain a secret or credential. Keep the variable unset for demo mode.
+New business: copy `src/profiles/electrician/` and `public/profiles/electrician/`, replace every data category, point `ACTIVE_PROFILE` at the new profile, set `base` in `vite.config.js`, and set the `VITE_LEAD_ENDPOINT` repository variable if leads should go to a server.
+
+## Status
+
+Complete template with one demo profile, deployed to GitHub Pages.
+
+## Author
+
+**Or Delevski** · https://ordelwebsite.vercel.app
